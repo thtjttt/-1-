@@ -1,0 +1,401 @@
+/* ===== สีและขนาดหลักของทั้งเว็บ ===== */
+:root {
+  --color-bg: #f5f6f8;
+  --color-surface: #ffffff;
+  --color-text: #1f2933;
+  --color-muted: #5b6672;
+  --color-border: #dde1e6;
+  --color-primary: #0277bd;
+  --color-primary-hover: #01609a;
+  --color-primary-soft: #e3f2fb;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: "Sarabun", "Leelawadee UI", "Tahoma", sans-serif;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+/* ===== แถบด้านบน ===== */
+.site-header {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.site-header .inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.brand small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.nav {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.nav a:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.nav a.active {
+  background: #ffffff;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ===== เนื้อหาหลัก ===== */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 16px 48px;
+}
+
+.page-title {
+  margin: 0 0 4px;
+  font-size: 1.6rem;
+}
+
+.page-subtitle {
+  margin: 0 0 28px;
+  color: var(--color-muted);
+}
+
+/* ===== การ์ดเมนูหน้าแรก ===== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(16, 24, 40, 0.08);
+}
+
+.card h2 {
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+}
+
+.card p {
+  margin: 0 0 16px;
+  color: var(--color-muted);
+  flex: 1;
+}
+
+.card .go {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ===== กล่องข้อความทั่วไป ===== */
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+
+.notice {
+  margin-top: 28px;
+  padding: 14px 18px;
+  border-left: 4px solid var(--color-primary);
+  background: var(--color-surface);
+  color: var(--color-muted);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* ===== แถบค้นหาและปุ่มกรอง ===== */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.search-box {
+  flex: 1 1 320px;
+  font: inherit;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+}
+
+.search-box:focus {
+  outline: 2px solid var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-group button {
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.filter-group button:hover {
+  border-color: var(--color-primary);
+}
+
+.filter-group button.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.filter-group .count {
+  opacity: 0.8;
+}
+
+.legend {
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: #fff3e0;
+  border-left: 4px solid #ef6c00;
+  flex-shrink: 0;
+}
+
+/* ===== ตารางชุดเบิก ===== */
+.table-wrap {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+}
+
+.claims-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.claims-table th,
+.claims-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.claims-table th {
+  background: #f0f3f6;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.claims-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.claims-table .num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.claims-table td[data-label="วันที่ส่งออก"],
+.claims-table td[data-label="วันที่ถึงลูกค้า"],
+.claims-table td[data-label="เลขชุดเบิก"],
+.claims-table td[data-label="เลขพัสดุ"] {
+  white-space: nowrap;
+}
+
+.muted {
+  color: var(--color-muted);
+}
+
+.empty {
+  margin: 0;
+  padding: 28px;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+/* ป้ายสถานะ */
+.badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-pending {
+  background: #eceff1;
+  color: #455a64;
+}
+
+.badge-sent {
+  background: var(--color-primary-soft);
+  color: #01579b;
+}
+
+.badge-delivered {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+/* แถวที่ส่งเกิน 7 วันแล้วยังไม่ถึง */
+.row-late td {
+  background: #fff3e0;
+}
+
+.row-late td:first-child {
+  box-shadow: inset 4px 0 0 #ef6c00;
+}
+
+.late-note {
+  margin-top: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #b34700;
+  white-space: nowrap;
+}
+
+/* ===== ท้ายหน้า ===== */
+.site-footer {
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  padding: 0 16px 32px;
+}
+
+/* ===== จอมือถือ ===== */
+@media (max-width: 600px) {
+  html {
+    font-size: 17px;
+  }
+  .site-header .inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  main {
+    padding-top: 24px;
+  }
+
+  /* ตารางบนมือถือ: เปลี่ยนแต่ละแถวเป็นการ์ด */
+  .table-wrap {
+    background: transparent;
+    border: none;
+  }
+  .claims-table thead {
+    display: none;
+  }
+  .claims-table,
+  .claims-table tbody,
+  .claims-table tr,
+  .claims-table td {
+    display: block;
+    width: 100%;
+  }
+  .claims-table tr {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .claims-table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 14px;
+    text-align: right;
+  }
+  .claims-table td::before {
+    content: attr(data-label);
+    color: var(--color-muted);
+    text-align: left;
+    flex-shrink: 0;
+  }
+  .claims-table td:last-child {
+    border-bottom: none;
+  }
+  .claims-table td[data-label="สถานะ"] {
+    flex-wrap: wrap;
+  }
+  .late-note {
+    width: 100%;
+  }
+}

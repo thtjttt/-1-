@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รายการชุดเบิก | ระบบติดตามเอกสารชุดเบิก</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html">
+        ระบบติดตามเอกสารชุดเบิก
+        <small>สำนักพิมพ์อมตะ</small>
+      </a>
+      <nav class="nav">
+        <a href="index.html">หน้าแรก</a>
+        <a href="claims.html" class="active">รายการชุดเบิก</a>
+        <a href="add-claim.html">เพิ่มชุดเบิก</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <h1 class="page-title">รายการชุดเบิก</h1>
+    <p class="page-subtitle">ดูสถานะการส่งเอกสารชุดเบิกทั้งหมด</p>
+
+    <div class="toolbar">
+      <input type="search" id="search" class="search-box"
+             placeholder="ค้นหาชื่อร้าน เลขชุดเบิก หรือชื่อผู้รับ" aria-label="ค้นหา">
+      <div class="filter-group" id="filters">
+        <button type="button" data-filter="all" class="active">ทั้งหมด <span class="count"></span></button>
+        <button type="button" data-filter="pending">ยังไม่ส่ง <span class="count"></span></button>
+        <button type="button" data-filter="sent">ส่งแล้ว <span class="count"></span></button>
+        <button type="button" data-filter="delivered">ถึงแล้ว <span class="count"></span></button>
+      </div>
+    </div>
+
+    <p class="legend">
+      <span class="legend-swatch"></span>
+      แถวสีส้ม = ส่งไปเกิน 7 วันแล้วยังไม่ได้บันทึกว่าถึงลูกค้า ควรตามเรื่อง
+    </p>
+
+    <div class="table-wrap">
+      <table class="claims-table">
+        <thead>
+          <tr>
+            <th>ชื่อร้าน</th>
+            <th>เลขชุดเบิก</th>
+            <th class="num">จำนวนเอกสาร</th>
+            <th>สถานะ</th>
+            <th>วันที่ส่งออก</th>
+            <th>เลขพัสดุ</th>
+            <th>วันที่ถึงลูกค้า</th>
+            <th>ผู้รับ</th>
+          </tr>
+        </thead>
+        <tbody id="claims-body"></tbody>
+      </table>
+      <p class="empty" id="empty" hidden>ไม่พบชุดเบิกที่ตรงกับการค้นหา</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    สำนักพิมพ์อมตะ &middot; ระบบติดตามเอกสารชุดเบิก
+  </footer>
+
+  <script src="data.js"></script>
+  <script>
+    const claims = loadClaims();
+    let currentFilter = "all";
+
+    const body = document.getElementById("claims-body");
+    const empty = document.getElementById("empty");
+    const searchBox = document.getElementById("search");
+    const filterButtons = document.querySelectorAll("#filters button");
+
+    // กันตัวอักษรพิเศษในชื่อ ไม่ให้หน้าเว็บเพี้ยน
+    function esc(text) {
+      const div = document.createElement("div");
+      div.textContent = text == null ? "" : String(text);
+      return div.innerHTML;
+    }
+
+    function dash(text) {
+      return text ? esc(text) : '<span class="muted">–</span>';
+    }
+
+    function docBreakdown(claim) {
+      return DOC_TYPES.map(t => t.label + " " + (claim.docs[t.key] || 0)).join(", ");
+    }
+
+    function render() {
+      const q = searchBox.value.trim().toLowerCase();
+
+      // จำนวนบนปุ่มกรอง
+      const counts = { all: claims.length, pending: 0, sent: 0, delivered: 0 };
+      claims.forEach(c => counts[c.status]++);
+      filterButtons.forEach(btn => {
+        btn.querySelector(".count").textContent = "(" + counts[btn.dataset.filter] + ")";
+      });
+
+      const rows = claims.filter(c => {
+        if (currentFilter !== "all" && c.status !== currentFilter) return false;
+        if (!q) return true;
+        return [c.shop, c.claimNo, c.receiver].some(v => (v || "").toLowerCase().includes(q));
+      });
+
+      body.innerHTML = rows.map(c => {
+        const late = isLate(c);
+        const lateNote = late
+          ? '<div class="late-note">ส่งมาแล้ว ' + daysSince(c.sentDate) + ' วัน</div>'
+          : "";
+        return '<tr class="' + (late ? "row-late" : "") + '">' +
+          '<td data-label="ชื่อร้าน"><strong>' + esc(c.shop) + '</strong></td>' +
+          '<td data-label="เลขชุดเบิก">' + esc(c.claimNo) + '</td>' +
+          '<td data-label="จำนวนเอกสาร" class="num" title="' + esc(docBreakdown(c)) + '">' +
+            totalDocs(c) + ' ฉบับ</td>' +
+          '<td data-label="สถานะ"><span class="badge badge-' + c.status + '">' +
+            STATUS_LABELS[c.status] + '</span>' + lateNote + '</td>' +
+          '<td data-label="วันที่ส่งออก">' + dash(formatThaiDate(c.sentDate)) + '</td>' +
+          '<td data-label="เลขพัสดุ">' + dash(c.tracking) + '</td>' +
+          '<td data-label="วันที่ถึงลูกค้า">' + dash(formatThaiDate(c.deliveredDate)) + '</td>' +
+          '<td data-label="ผู้รับ">' + dash(c.receiver) + '</td>' +
+        '</tr>';
+      }).join("");
+
+      empty.hidden = rows.length > 0;
+    }
+
+    searchBox.addEventListener("input", render);
+    filterButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentFilter = btn.dataset.filter;
+        filterButtons.forEach(b => b.classList.toggle("active", b === btn));
+        render();
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>
